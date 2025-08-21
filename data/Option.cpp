@@ -1,12 +1,12 @@
 #include "Option.hpp" 
 
 Option::Option(double T, double K, double sig, double r, double S)
-    : T(T), K(K), sig(sig), r(r), S(S)
+    : T_(T), K_(K), sig_(sig), r_(r), S_(S)
 {
 }
 
 Option::Option(const Option& other)
-    : T(other.T), K(other.K), sig(other.sig), r(other.r), S(other.S)
+    : T_(other.T_), K_(other.K_), sig_(other.sig_), r_(other.r_), S_(other.S_)
 {
 }
 
@@ -18,18 +18,18 @@ Option& Option::operator = (const Option& other)
 {
     if (this != &other)
     {
-        T = other.T;
-        K = other.K;
-        sig = other.sig;
-        r = other.r;
-        S = other.S;
+        T_ = other.T_;
+        K_ = other.K_;
+        sig_ = other.sig_;
+        r_ = other.r_;
+        S_ = other.S_;
     }
     return *this;
 }
 
 bool Option::operator == (const Option& other) const
 {
-    return (T == other.T && K == other.K && sig == other.sig && r == other.r && S == other.S);
+    return (T_ == other.T_ && K_ == other.K_ && sig_ == other.sig_ && r_ == other.r_ && S_ == other.S_);
 }
 
 bool Option::operator != (const Option& other) const
@@ -40,10 +40,10 @@ bool Option::operator != (const Option& other) const
 std::string Option::toString() const
 {
     std::string out;
-    out += "Expiry time (T): " + std::to_string(T) + "\n";
-    out += "Strike price (K): " + std::to_string(K) + "\n";
-    out += "Volatility (sig): " + std::to_string(sig) + "\n";
-    out += "Interest rate (r): " + std::to_string(r) + "\n";
-    out += "Underlying price (S): " + std::to_string(S) + "\n";
+    out += "Expiry time (T): " + std::to_string(T_) + "\n";
+    out += "Strike price (K): " + std::to_string(K_) + "\n";
+    out += "Volatility (sig): " + std::to_string(sig_) + "\n";
+    out += "Interest rate (r): " + std::to_string(r_) + "\n";
+    out += "Underlying price (S): " + std::to_string(S_) + "\n";
     return out;
 }
