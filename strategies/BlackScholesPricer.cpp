@@ -1,9 +1,9 @@
 #include "BlackScholesPricer.hpp"
 #include <cmath>
+#include <boost/math/distributions/normal.hpp>
 
 double BlackScholesPricer::calculateCallPrice(const Option& option) const
 {
-    // Implement the Black-Scholes formula for call options
     return 0.0;
 }
 
@@ -31,3 +31,14 @@ std::pair<double, double> BlackScholesPricer::calculateD1D2(const Option& option
     return {d1, d2};
 }
 
+double BlackScholesPricer::N(double x) const
+{
+    // Use Boost's normal distribution to calculate the cumulative distribution function
+    return boost::math::cdf(NormDist_, x);
+}
+
+double BlackScholesPricer::n(double x) const
+{
+    // Use Boost's normal distribution to calculate the probability density function
+    return boost::math::pdf(NormDist_, x);
+}
