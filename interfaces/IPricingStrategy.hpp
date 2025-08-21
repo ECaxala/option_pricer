@@ -5,7 +5,7 @@
 #include "Option.hpp"
 
 /**
- * @brief Common interface for option pricing strategies:
+ * @brief Common interface class for option pricing strategies:
  * - Black-Scholes (exact solution)
  * - ...tbd
  */
