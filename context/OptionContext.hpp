@@ -18,9 +18,9 @@
 #define OPTIONCONTEXT_HPP
 
 #include "IPricingStrategy.hpp"
+#include "IParityValidator.hpp"
 #include "Option.hpp"
-
-
+#include <memory>
 
 class OptionContext
 {
@@ -31,11 +31,17 @@ public:
     ~OptionContext();
 
     // Strategy management
-    void setPricingStrategy(std::unique_ptr<IPricingStrategy> strategy);    
+    void setPricingStrategy(std::unique_ptr<IPricingStrategy> strategy);
+    void setParityValidator(std::unique_ptr<IParityValidator> validator);
 
-    // Single option pricing
+    // Single option pricing 
     double calculateCallPrice(const Option& option) const;
     double calculatePutPrice(const Option& option) const;
+
+    // Put-Call Parity
+    bool verifyParity(const Option& option, double tolerance = 1e-6) const;
+    double callFromPutParity(const Option& option, double putPrice) const;
+    double putFromCallParity(const Option& option, double callPrice) const;
 
     // Utility functions
     std::string getCurrentStrategyName() const;
@@ -43,9 +49,11 @@ public:
 private:
 
     std::unique_ptr<IPricingStrategy> pricingStrategy_; // Strategy for pricing options
+    std::unique_ptr<IParityValidator> parityValidator_; // Validator for put-call parity
 
-    // Validation function to ensure the strategy is set
+    // Validation functions
     void validateStrategy() const;
+    void validateParityValidator() const;
 };
 
 #endif // OPTIONCONTEXT_HPP

@@ -6,10 +6,16 @@ find_package(Boost REQUIRED COMPONENTS system filesystem random math)
 
 add_executable(comp_finance_app
     main.cpp
-    data/Option.cpp
-    strategies/BlackScholesPricer.cpp
     interfaces/IPricingStrategy.hpp
+    interfaces/IParityValidator.hpp
+
+    data/Option.cpp
+
+    strategies/BlackScholesPricer.cpp
+
     context/OptionContext.cpp
+    
+    validators/PutCallParityValidator.cpp
 )
 
 target_include_directories(comp_finance_app PRIVATE
@@ -19,6 +25,7 @@ target_include_directories(comp_finance_app PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/strategies
     ${CMAKE_CURRENT_SOURCE_DIR}/plain_option
     ${CMAKE_CURRENT_SOURCE_DIR}/context
+    ${CMAKE_CURRENT_SOURCE_DIR}/validators
 )
 
 # Use modern Boost targets instead of legacy variables
