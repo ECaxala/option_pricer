@@ -4,13 +4,24 @@
 
 double BlackScholesPricer::calculateCallPrice(const Option& option) const
 {
-    return 0.0;
+    // receive d1 and d2 use structure binding syntax
+    auto [d1, d2] = calculateD1D2(option);
+    
+    // Black-Scholes call formula: C = S*N(d1) - K*e^(-r*T)*N(d2)
+    // For stock options without dividends, no dividend adjustment needed
+    return (option.AssetPrice() * N(d1)) -
+           (option.StrikePrice() * std::exp(-option.RiskFreeRate() * option.ExerciseDate()) * N(d2));
 }
 
 double BlackScholesPricer::calculatePutPrice(const Option& option) const
 {
-    // Implement the Black-Scholes formula for put options
-    return 0.0;
+    // receive d1 and d2 use structure binding syntax
+    auto [d1, d2] = calculateD1D2(option);
+    
+    // Black-Scholes put formula: P = K*e^(-r*T)*N(-d2) - S*e^(-q*T)*N(-d1)
+    // For stock options without dividends, q = 0, so e^(-q*T) = 1
+    return (option.StrikePrice() * std::exp(-option.RiskFreeRate() * option.ExerciseDate()) * N(-d2)) -
+           (option.AssetPrice() * N(-d1));
 }
 
 std::string BlackScholesPricer::getName() const
