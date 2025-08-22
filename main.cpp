@@ -8,8 +8,10 @@
 
 #include "OptionContext.hpp"
 #include "BlackScholesPricer.hpp"
+#include "PutCallParityValidator.hpp"
 #include "Option.hpp"
 
+// Simple struct to hold test batch data
 struct TestBatch
 {
     std::string name;
@@ -55,4 +57,39 @@ int main(void)
         assert(std::abs(putPrice - batch.expectedPutPrice) < 1e-5);
     }
 
+    std::cout << "\n=== PUT-CALL PARITY TESTING (Teil b) ===" << std::endl;
+    
+    // Setup parity validator
+    auto parityValidator = std::make_unique<PutCallParityValidator>();
+    
+    // Set the parity validator in the existing context
+    context.setParityValidator(std::move(parityValidator));
+    
+    // Test Put-Call Parity for each batch
+    for (const auto& batch : batches)
+    {
+        std::cout << "\n--- " << batch.name << " Parity Test ---" << std::endl;
+        
+        // Calculate direct prices
+        double directCall = context.calculateCallPrice(batch.option);
+        double directPut = context.calculatePutPrice(batch.option);
+        
+        // Test parity validation
+        bool parityValid = context.verifyParity(batch.option, 1e-6);
+        
+        // Test parity-based calculations
+        double parityCall = context.callFromPutParity(batch.option, directPut);
+        double parityPut = context.putFromCallParity(batch.option, directCall);
+        
+        std::cout << "Direct Call: " << directCall << ", Parity Call: " << parityCall << std::endl;
+        std::cout << "Direct Put: " << directPut << ", Parity Put: " << parityPut << std::endl;
+        std::cout << "Parity Valid: " << (parityValid ? "YES" : "NO") << std::endl;
+        
+        // Assert parity relationships hold
+        assert(parityValid);
+        assert(std::abs(directCall - parityCall) < 1e-6);
+        assert(std::abs(directPut - parityPut) < 1e-6);
+    }
+    
+    std::cout << "\n=== ALL TESTS PASSED ===" << std::endl;
 }
