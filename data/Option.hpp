@@ -37,6 +37,7 @@ public:
 
     // Utility function
     std::string toString() const;
+    bool isValid() const;
 
 private:
 

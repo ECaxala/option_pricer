@@ -47,3 +47,9 @@ std::string Option::toString() const
     out += "Underlying price (S): " + std::to_string(S_) + "\n";
     return out;
 }
+
+bool Option::isValid() const
+{
+    // Financial constrains: All parameters expect r must be positive
+    return (T_ > 0 && K_ > 0 && sig_ > 0 && S_ > 0);
+}
