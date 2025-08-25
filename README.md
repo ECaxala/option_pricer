@@ -16,6 +16,16 @@ This project implements a flexible option pricing framework using the **Strategy
 - **High-Performance Libraries** - Boost and STL integration for performance and security
 - **Professional Build System** - CMake configuration with comprehensive dependency management
 
+## ⚡ Quick Start
+
+```bash
+mkdir build && cd build
+cmake .. && make
+./option_pricer
+```
+
+*For detailed setup instructions, see the [Building the Project](#building-the-project) section below.*
+
 ## 🏗️ Architecture
 
 The project follows a clean, layered architecture implementing the Strategy Pattern:
@@ -98,7 +108,7 @@ The project follows a clean, layered architecture implementing the Strategy Patt
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 🚀 Quick Start
+## 🚀 Building the Project
 
 ### Prerequisites
 
@@ -192,29 +202,6 @@ The project includes comprehensive test batches validating pricing accuracy:
 | Batch 2 | T=1.0, K=100, σ=0.20, r=0.0, S=100 | 7.96557 | 7.96557 | ✅ |
 | Batch 3 | T=1.0, K=10, σ=0.50, r=0.12, S=5 | 0.204058 | 4.07326 | ✅ |
 | Batch 4 | T=30.0, K=100, σ=0.30, r=0.08, S=100 | 92.17570 | 1.24750 | ✅ |
-
-## 🎯 Professional Highlights
-
-### Software Engineering Excellence
-- **Clean Architecture** - Modular design following SOLID principles
-- **Modern C++** - Leveraging C++20 features and best practices
-- **Memory Safety** - Smart pointers and RAII patterns for automatic resource management
-- **Performance Optimization** - Boost and STL integration for maximum efficiency
-- **Security Focus** - Industry-standard libraries for secure mathematical computations
-- **Comprehensive Testing** - Automated validation with precision checks
-
-### Financial Mathematics Expertise
-- **Black-Scholes Model** - Industry-standard option pricing implementation
-- **Put-Call Parity** - Deep understanding of option relationships
-- **Numerical Precision** - Careful handling of floating-point calculations
-- **Mathematical Validation** - Rigorous testing against known results
-
-### Development Best Practices
-- **Version Control Ready** - Professional Git repository structure
-- **Build System** - Modern CMake configuration with dependency management
-- **Library Integration** - Strategic use of Boost and STL for performance and security
-- **Documentation** - Clear code comments and architectural documentation
-- **Extensibility** - Strategy pattern enables easy model additions
 
 ## 🔮 Future Extensions
 
