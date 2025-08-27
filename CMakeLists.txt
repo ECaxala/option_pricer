@@ -29,6 +29,8 @@ add_executable(option_pricer
     context/OptionContext.cpp
     
     validators/PutCallParityValidator.cpp
+    
+    utils/MeshUtils.hpp
 )
 
 target_include_directories(option_pricer PRIVATE
@@ -39,6 +41,7 @@ target_include_directories(option_pricer PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/plain_option
     ${CMAKE_CURRENT_SOURCE_DIR}/context
     ${CMAKE_CURRENT_SOURCE_DIR}/validators
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils
 )
 
 # Use modern Boost targets instead of legacy variables

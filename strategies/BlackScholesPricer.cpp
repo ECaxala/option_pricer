@@ -29,6 +29,61 @@ std::string BlackScholesPricer::getName() const
     return "Black-Scholes Pricer\n - Exact Solutions of One-Factor Plain Options ";
 }
 
+std::vector<double> BlackScholesPricer::calculateCallVector(const std::vector<Option>& options) const
+{
+    std::vector<double> callPrices;
+    callPrices.reserve(options.size());
+    
+    for (const auto& option : options) {
+        callPrices.push_back(calculateCallPrice(option));
+    }
+    
+    return callPrices;
+}
+
+std::vector<double> BlackScholesPricer::calculatePutVector(const std::vector<Option>& options) const
+{
+    std::vector<double> putPrices;
+    putPrices.reserve(options.size());
+    
+    for (const auto& option : options) {
+        putPrices.push_back(calculatePutPrice(option));
+    }
+    
+    return putPrices;
+}
+
+std::vector<std::vector<double>> BlackScholesPricer::calculateCallMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    std::vector<std::vector<double>> callMatrix;
+    callMatrix.reserve(optionMatrix.size());
+    
+    for (const auto& optionRow : optionMatrix) {
+        callMatrix.push_back(calculateCallVector(optionRow));
+    }
+    
+    return callMatrix;
+}
+
+std::vector<std::vector<double>> BlackScholesPricer::calculatePutMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    std::vector<std::vector<double>> putMatrix;
+    putMatrix.reserve(optionMatrix.size());
+    
+    for (const auto& optionRow : optionMatrix) {
+        putMatrix.push_back(calculatePutVector(optionRow));
+    }
+    
+    return putMatrix;
+}
+
+bool BlackScholesPricer::supportsGreeks() const
+{
+    return true;
+}
+
 std::pair<double, double> BlackScholesPricer::calculateD1D2(const Option& option) const
 {
     // Calculate d1 and d2 for the Black-Scholes formula

@@ -34,9 +34,19 @@ public:
     void setPricingStrategy(std::unique_ptr<IPricingStrategy> strategy);
     void setParityValidator(std::unique_ptr<IParityValidator> validator);
 
-    // Single option pricing 
+    // Single option pricing
     double calculateCallPrice(const Option& option) const;
     double calculatePutPrice(const Option& option) const;
+
+    // Vector pricing for monotonic ranges
+    std::vector<double> calculateCallVector(const std::vector<Option>& options) const;
+    std::vector<double> calculatePutVector(const std::vector<Option>& options) const;
+
+    // Matrix pricing for parameter variations
+    std::vector<std::vector<double>> calculateCallMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const;
+    std::vector<std::vector<double>> calculatePutMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const;
 
     // Put-Call Parity
     bool verifyParity(const Option& option, double tolerance = 1e-6) const;

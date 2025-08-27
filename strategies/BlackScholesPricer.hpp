@@ -10,10 +10,23 @@ class BlackScholesPricer : public IPricingStrategy
 {
 public:
 
+    // Single option pricing
     double calculateCallPrice(const Option& option) const override;
     double calculatePutPrice(const Option& option) const override;
 
+    // Vector pricing
+    std::vector<double> calculateCallVector(const std::vector<Option>& options) const override;
+    std::vector<double> calculatePutVector(const std::vector<Option>& options) const override;
+
+    // Matrix pricing
+    std::vector<std::vector<double>> calculateCallMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const override;
+    std::vector<std::vector<double>> calculatePutMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const override;
+
+    // Utility functions
     std::string getName() const override;
+    bool supportsGreeks() const override;
 
 private:
     // Helper functions for Black-Scholes calculations

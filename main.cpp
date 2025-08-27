@@ -10,6 +10,7 @@
 #include "BlackScholesPricer.hpp"
 #include "PutCallParityValidator.hpp"
 #include "Option.hpp"
+#include "MeshUtils.hpp"
 
 // Simple struct to hold test batch data
 struct TestBatch
@@ -89,6 +90,30 @@ int main(void)
         assert(parityValid);
         assert(std::abs(directCall - parityCall) < 1e-6);
         assert(std::abs(directPut - parityPut) < 1e-6);
+    }
+    
+    std::cout << "\n=== VECTOR PRICING TEST (Teil c) ===" << std::endl;
+    
+    // Test global meshArray function and vector pricing
+    auto spotPrices = meshArray(60.0, 80.0, 1.0);  // 10, 11, 12, ..., 50
+    
+    // Create vector of options with varying spot prices
+    std::vector<Option> optionVector;
+    for (double S : spotPrices) {
+        Option option = Batch_1.option;
+        option.AssetPrice(S);
+        optionVector.push_back(option);
+    }
+    
+    // Vector pricing
+    auto callPrices = context.calculateCallVector(optionVector);
+    auto putPrices = context.calculatePutVector(optionVector);
+    
+    std::cout << "Generated " << spotPrices.size() << " spot prices" << std::endl;
+    std::cout << "First few results:" << std::endl;
+    for (size_t i = 0; i < 20; ++i) {
+        std::cout << "S=" << spotPrices[i] << ", Call=" << callPrices[i]
+                  << ", Put=" << putPrices[i] << std::endl;
     }
     
     std::cout << "\n=== ALL TESTS PASSED ===" << std::endl;

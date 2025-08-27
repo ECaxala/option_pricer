@@ -55,6 +55,32 @@ double OptionContext::calculatePutPrice(const Option& option) const
     return pricingStrategy_->calculatePutPrice(option);
 }
 
+std::vector<double> OptionContext::calculateCallVector(const std::vector<Option>& options) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculateCallVector(options);
+}
+
+std::vector<double> OptionContext::calculatePutVector(const std::vector<Option>& options) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculatePutVector(options);
+}
+
+std::vector<std::vector<double>> OptionContext::calculateCallMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculateCallMatrix(optionMatrix);
+}
+
+std::vector<std::vector<double>> OptionContext::calculatePutMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculatePutMatrix(optionMatrix);
+}
+
 bool OptionContext::verifyParity(const Option& option, double tolerance) const
 {
     validateStrategy();
