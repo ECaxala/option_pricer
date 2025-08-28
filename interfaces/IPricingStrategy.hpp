@@ -32,6 +32,11 @@ public:
     virtual double calculateCallDelta(const Option& option) const = 0;
     virtual double calculatePutDelta(const Option& option) const = 0;
 
+    // Vector Greeks calculation for monotonic ranges
+    virtual std::vector<double> calculateCallDeltaVector(const std::vector<Option>& options) const = 0;
+    virtual std::vector<double> calculatePutDeltaVector(const std::vector<Option>& options) const = 0;
+    virtual std::vector<double> calculateGammaVector(const std::vector<Option>& options) const = 0;
+
     // Utility functions
     virtual std::string getName() const = 0;
     virtual bool supportsGreeks() const = 0;

@@ -218,5 +218,40 @@ int main(void)
     
     std::cout << "Greeks Test Complete" << std::endl;
     
+    std::cout << "\n=== DELTA VECTOR CALCULATION TEST (part b) ===" << std::endl;
+    
+    // Generate monotonic range of underlying values as requested: 10, 11, 12, ..., 50
+    auto underlyingValues = meshArray(10.0, 50.0, 1.0);
+    
+    // Create vector of options with varying underlying asset prices
+    std::vector<Option> deltaTestOptions;
+    for (double S : underlyingValues)
+    {
+        Option option = gammaTestOption;  // Use same base parameters as gamma test
+        option.AssetPrice(S);
+        deltaTestOptions.push_back(option);
+    }
+    
+    // Calculate call delta vector for monotonic range
+    auto callDeltaVector = context.calculateCallDeltaVector(deltaTestOptions);
+    auto putDeltaVector = context.calculatePutDeltaVector(deltaTestOptions);
+    
+    std::cout << "Generated " << underlyingValues.size() << " underlying values from 10 to 50" << std::endl;
+    std::cout << "First few call delta results:" << std::endl;
+    for (size_t i = 0; i < 10; ++i)
+    {
+        std::cout << "S=" << underlyingValues[i] << ", Call Delta=" << callDeltaVector[i]
+                  << ", Put Delta=" << putDeltaVector[i] << std::endl;
+    }
+    
+    std::cout << "\nLast few call delta results:" << std::endl;
+    for (size_t i = 0; i < underlyingValues.size(); ++i)
+    {
+        std::cout << "S=" << underlyingValues[i] << ", Call Delta=" << callDeltaVector[i]
+                  << ", Put Delta=" << putDeltaVector[i] << std::endl;
+    }
+    
+    std::cout << "Vector Delta Test Complete" << std::endl;
+    
     std::cout << "\n=== ALL TESTS PASSED ===" << std::endl;
 }

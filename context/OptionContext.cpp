@@ -88,6 +88,24 @@ double OptionContext::calculatePutDelta(const Option& option) const
     return pricingStrategy_->calculatePutDelta(option);
 }
 
+std::vector<double> OptionContext::calculateCallDeltaVector(const std::vector<Option>& options) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculateCallDeltaVector(options);
+}
+
+std::vector<double> OptionContext::calculatePutDeltaVector(const std::vector<Option>& options) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculatePutDeltaVector(options);
+}
+
+std::vector<double> OptionContext::calculateGammaVector(const std::vector<Option>& options) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculateGammaVector(options);
+}
+
 std::vector<double> OptionContext::calculateCallVector(const std::vector<Option>& options) const
 {
     validateStrategy();

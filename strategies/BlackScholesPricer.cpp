@@ -113,6 +113,45 @@ double BlackScholesPricer::calculatePutDelta(const Option& option) const
     return std::exp((b - option.RiskFreeRate()) * option.ExerciseDate()) * (N(d1) - 1.0);
 }
 
+std::vector<double> BlackScholesPricer::calculateCallDeltaVector(const std::vector<Option>& options) const
+{
+    std::vector<double> callDeltas;
+    callDeltas.reserve(options.size());
+    
+    for (const auto& option : options)
+    {
+        callDeltas.push_back(calculateCallDelta(option));
+    }
+    
+    return callDeltas;
+}
+
+std::vector<double> BlackScholesPricer::calculatePutDeltaVector(const std::vector<Option>& options) const
+{
+    std::vector<double> putDeltas;
+    putDeltas.reserve(options.size());
+    
+    for (const auto& option : options)
+    {
+        putDeltas.push_back(calculatePutDelta(option));
+    }
+    
+    return putDeltas;
+}
+
+std::vector<double> BlackScholesPricer::calculateGammaVector(const std::vector<Option>& options) const
+{
+    std::vector<double> gammas;
+    gammas.reserve(options.size());
+    
+    for (const auto& option : options)
+    {
+        gammas.push_back(calculateGamma(option));
+    }
+    
+    return gammas;
+}
+
 std::pair<double, double> BlackScholesPricer::calculateD1D2(const Option& option) const
 {
     // Calculate d1 and d2 for the Black-Scholes formula

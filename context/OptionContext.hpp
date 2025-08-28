@@ -43,6 +43,11 @@ public:
     double calculateCallDelta(const Option& option) const;
     double calculatePutDelta(const Option& option) const;
 
+    // Vector Greeks calculation for monotonic ranges
+    std::vector<double> calculateCallDeltaVector(const std::vector<Option>& options) const;
+    std::vector<double> calculatePutDeltaVector(const std::vector<Option>& options) const;
+    std::vector<double> calculateGammaVector(const std::vector<Option>& options) const;
+
     // Vector pricing for monotonic ranges
     std::vector<double> calculateCallVector(const std::vector<Option>& options) const;
     std::vector<double> calculatePutVector(const std::vector<Option>& options) const;

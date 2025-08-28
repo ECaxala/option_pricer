@@ -29,6 +29,11 @@ public:
     double calculateCallDelta(const Option& option) const override;
     double calculatePutDelta(const Option& option) const override;
 
+    // Vector Greeks calculation for monotonic ranges
+    std::vector<double> calculateCallDeltaVector(const std::vector<Option>& options) const override;
+    std::vector<double> calculatePutDeltaVector(const std::vector<Option>& options) const override;
+    std::vector<double> calculateGammaVector(const std::vector<Option>& options) const override;
+
     // Utility functions
     std::string getName() const override;
     bool supportsGreeks() const override;
