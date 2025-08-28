@@ -28,9 +28,9 @@ inline std::vector<double> meshArray(double start, double end, double meshSize)
     }
     
     std::vector<double> result;
-    
-    // Calculate number of steps
-    int numSteps = static_cast<int>(std::ceil((end - start) / meshSize));
+
+    // Implicit ceil and conversion
+    int numSteps = (end - start) / meshSize;
     
     // Reserve memory for better performance
     result.reserve(numSteps + 1);

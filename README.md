@@ -10,6 +10,9 @@ This project implements a flexible option pricing framework using the **Strategy
 
 - **Strategy Pattern Architecture** - Modular design for easy extension with new pricing models
 - **Black-Scholes Implementation** - Exact analytical solution for European options
+- **Vector Pricing** - Efficient batch pricing for monotonic ranges of underlying values
+- **Matrix Pricing** - Multi-dimensional parameter variation support
+- **Global Mesh Function** - Creates monotonic arrays (e.g., 10, 11, 12, ..., 50) for parameter sweeps
 - **Put-Call Parity Validation** - Mathematical relationship verification between call and put options
 - **Comprehensive Testing** - Automated test batches with precision validation
 - **Modern C++20** - Leveraging latest language features and best practices
@@ -47,6 +50,8 @@ The project follows a clean, layered architecture implementing the Strategy Patt
 │  │                     │    │ + putFromCall()                 │  │
 │  │ + setStrategy()     │    │                                 │  │
 │  │ + calculatePrice()  │    │                                 │  │
+│  │ + calculateVector() │    │                                 │  │
+│  │ + calculateMatrix() │    │                                 │  │
 │  │ + verifyParity()    │    │                                 │  │
 │  └─────────────────────┘    └─────────────────────────────────┘  │
 │                                                                 │
@@ -63,7 +68,12 @@ The project follows a clean, layered architecture implementing the Strategy Patt
 │  │                                                             │  │
 │  │ + calculateCallPrice(option) : double                       │  │
 │  │ + calculatePutPrice(option) : double                        │  │
+│  │ + calculateCallVector(options) : vector<double>             │  │
+│  │ + calculatePutVector(options) : vector<double>              │  │
+│  │ + calculateCallMatrix(matrix) : vector<vector<double>>      │  │
+│  │ + calculatePutMatrix(matrix) : vector<vector<double>>       │  │
 │  │ + getName() : string                                        │  │
+│  │ + supportsGreeks() : bool                                   │  │
 │  └─────────────────────────────────────────────────────────────┘  │
 │                                ▲                               │
 └─────────────────────────────────────────────────────────────────┘
@@ -79,6 +89,10 @@ The project follows a clean, layered architecture implementing the Strategy Patt
 │  │                                                             │  │
 │  │ + calculateCallPrice() : double                             │  │
 │  │ + calculatePutPrice() : double                              │  │
+│  │ + calculateCallVector() : vector<double>                    │  │
+│  │ + calculatePutVector() : vector<double>                     │  │
+│  │ + calculateCallMatrix() : vector<vector<double>>            │  │
+│  │ + calculatePutMatrix() : vector<vector<double>>             │  │
 │  │ - calculateD1() : double                                    │  │
 │  │ - calculateD2() : double                                    │  │
 │  │ - normalCDF() : double                                      │  │
@@ -89,7 +103,7 @@ The project follows a clean, layered architecture implementing the Strategy Patt
                                 │ uses
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      DATA MODEL                                 │
+│                      DATA MODEL & UTILITIES                     │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────────┐  │
@@ -103,6 +117,13 @@ The project follows a clean, layered architecture implementing the Strategy Patt
 │  │                                                             │  │
 │  │ + toString() : string                                       │  │
 │  │ + isValid() : bool                                          │  │
+│  └─────────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌─────────────────────────────────────────────────────────────┐  │
+│  │                  MeshUtils                                  │  │
+│  │                                                             │  │
+│  │ + meshArray(start, end, step) : vector<double>              │  │
+│  │   Creates monotonic ranges: [10, 11, 12, ..., 50]          │  │
 │  └─────────────────────────────────────────────────────────────┘  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -142,7 +163,8 @@ The application runs comprehensive tests demonstrating:
 
 1. **Black-Scholes Pricing** - Calculates call and put option prices
 2. **Put-Call Parity Validation** - Verifies mathematical relationships
-3. **Precision Testing** - Validates results against expected values
+3. **Vector Pricing** - Batch pricing for monotonic ranges of underlying values
+4. **Precision Testing** - Validates results against expected values
 
 ```
 === BATCH 1 ===
@@ -156,6 +178,15 @@ Direct Call: 2.13337, Parity Call: 2.13337
 Direct Put: 5.84628, Parity Put: 5.84628
 Parity Valid: YES
 
+=== VECTOR PRICING TEST ===
+Generated 41 spot prices
+First few results:
+S=10, Call=0.000123, Put=55.0001
+S=11, Call=0.000234, Put=54.0002
+S=12, Call=0.000456, Put=53.0003
+S=13, Call=0.000789, Put=52.0004
+S=14, Call=0.001234, Put=51.0005
+
 === ALL TESTS PASSED ===
 ```
 
@@ -164,10 +195,11 @@ Parity Valid: YES
 ### Core Components
 
 - **[`Option`](data/Option.hpp)** - Encapsulates option parameters with validation
-- **[`IPricingStrategy`](interfaces/IPricingStrategy.hpp)** - Strategy interface for pricing models
-- **[`BlackScholesPricer`](strategies/BlackScholesPricer.hpp)** - Analytical Black-Scholes implementation
-- **[`OptionContext`](context/OptionContext.hpp)** - Context class managing strategy execution
+- **[`IPricingStrategy`](interfaces/IPricingStrategy.hpp)** - Strategy interface for pricing models with vector/matrix support
+- **[`BlackScholesPricer`](strategies/BlackScholesPricer.hpp)** - Analytical Black-Scholes implementation with batch pricing
+- **[`OptionContext`](context/OptionContext.hpp)** - Context class managing strategy execution and vector pricing
 - **[`PutCallParityValidator`](validators/PutCallParityValidator.hpp)** - Mathematical relationship validation
+- **[`MeshUtils`](utils/MeshUtils.hpp)** - Global mesh function for creating monotonic parameter ranges
 
 ### Design Patterns
 

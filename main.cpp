@@ -10,7 +10,8 @@
 #include "BlackScholesPricer.hpp"
 #include "PutCallParityValidator.hpp"
 #include "Option.hpp"
-#include "MeshUtils.hpp"
+#include "utils/MeshUtils.hpp"
+#include "utils/MatrixPrintUtils.hpp"
 
 // Simple struct to hold test batch data
 struct TestBatch
@@ -58,7 +59,7 @@ int main(void)
         assert(std::abs(putPrice - batch.expectedPutPrice) < 1e-5);
     }
 
-    std::cout << "\n=== PUT-CALL PARITY TESTING (Teil b) ===" << std::endl;
+    std::cout << "\n=== PUT-CALL PARITY TESTING (part b) ===" << std::endl;
     
     // Setup parity validator
     auto parityValidator = std::make_unique<PutCallParityValidator>();
@@ -92,7 +93,7 @@ int main(void)
         assert(std::abs(directPut - parityPut) < 1e-6);
     }
     
-    std::cout << "\n=== VECTOR PRICING TEST (Teil c) ===" << std::endl;
+    std::cout << "\n=== VECTOR PRICING TEST (part c) ===" << std::endl;
     
     // Test global meshArray function and vector pricing
     auto spotPrices = meshArray(60.0, 80.0, 1.0);  // 10, 11, 12, ..., 50
@@ -115,6 +116,66 @@ int main(void)
         std::cout << "S=" << spotPrices[i] << ", Call=" << callPrices[i]
                   << ", Put=" << putPrices[i] << std::endl;
     }
+    
+    std::cout << "\n=== MATRIX PRICING TEST (part d) ===" << std::endl;
+    
+    // i) Matrix pricing as function of Expiry Time
+    std::cout << "\ni) Expiry Time Matrix:" << std::endl;
+    auto expiryTimes = meshArray(0.1, 1.0, 0.2);  // 0.1, 0.3, 0.5, 0.7, 0.9
+    auto spotPricesMatrix = meshArray(50.0, 70.0, 5.0);  // 50, 55, 60, 65, 70
+    
+    std::vector<std::vector<Option>> expiryMatrix;
+    for (double T : expiryTimes) {
+        std::vector<Option> row;
+        for (double S : spotPricesMatrix) {
+            Option option = Batch_1.option;
+            option.ExerciseDate(T);
+            option.AssetPrice(S);
+            row.push_back(option);
+        }
+        expiryMatrix.push_back(row);
+    }
+    
+    auto expiryCallMatrix = context.calculateCallMatrix(expiryMatrix);
+    printMatrix(expiryTimes, spotPricesMatrix, expiryCallMatrix, "T\\S");
+    
+    // ii) Matrix pricing as function of Volatility
+    std::cout << "\nii) Volatility Matrix:" << std::endl;
+    auto volatilities = meshArray(0.1, 0.5, 0.1);  // 0.1, 0.2, 0.3, 0.4, 0.5
+    
+    std::vector<std::vector<Option>> volMatrix;
+    for (double vol : volatilities) {
+        std::vector<Option> row;
+        for (double S : spotPricesMatrix) {
+            Option option = Batch_1.option;
+            option.Volatility(vol);
+            option.AssetPrice(S);
+            row.push_back(option);
+        }
+        volMatrix.push_back(row);
+    }
+    
+    auto volCallMatrix = context.calculateCallMatrix(volMatrix);
+    printMatrix(volatilities, spotPricesMatrix, volCallMatrix, "Vol\\S");
+    
+    // iii) Matrix pricing with any parameter combination (Strike vs Spot)
+    std::cout << "\niii) Strike-Spot Matrix:" << std::endl;
+    auto strikes = meshArray(60.0, 80.0, 5.0);  // 60, 65, 70, 75, 80
+    
+    std::vector<std::vector<Option>> strikeMatrix;
+    for (double K : strikes) {
+        std::vector<Option> row;
+        for (double S : spotPricesMatrix) {
+            Option option = Batch_1.option;
+            option.StrikePrice(K);
+            option.AssetPrice(S);
+            row.push_back(option);
+        }
+        strikeMatrix.push_back(row);
+    }
+    
+    auto strikeCallMatrix = context.calculateCallMatrix(strikeMatrix);
+    printMatrix(strikes, spotPricesMatrix, strikeCallMatrix, "K\\S");
     
     std::cout << "\n=== ALL TESTS PASSED ===" << std::endl;
 }

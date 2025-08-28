@@ -19,8 +19,11 @@ find_package(Boost REQUIRED COMPONENTS system filesystem random math)
 
 add_executable(option_pricer
     main.cpp
+
     interfaces/IPricingStrategy.hpp
     interfaces/IParityValidator.hpp
+
+    utils/MeshUtils.hpp
 
     data/Option.cpp
 
@@ -30,7 +33,6 @@ add_executable(option_pricer
     
     validators/PutCallParityValidator.cpp
     
-    utils/MeshUtils.hpp
 )
 
 target_include_directories(option_pricer PRIVATE
