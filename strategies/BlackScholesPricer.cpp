@@ -152,6 +152,48 @@ std::vector<double> BlackScholesPricer::calculateGammaVector(const std::vector<O
     return gammas;
 }
 
+std::vector<std::vector<double>> BlackScholesPricer::calculateCallDeltaMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    std::vector<std::vector<double>> deltaMatrix;
+    deltaMatrix.reserve(optionMatrix.size());
+    
+    for (const auto& optionRow : optionMatrix)
+    {
+        deltaMatrix.push_back(calculateCallDeltaVector(optionRow));
+    }
+    
+    return deltaMatrix;
+}
+
+std::vector<std::vector<double>> BlackScholesPricer::calculatePutDeltaMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    std::vector<std::vector<double>> deltaMatrix;
+    deltaMatrix.reserve(optionMatrix.size());
+    
+    for (const auto& optionRow : optionMatrix)
+    {
+        deltaMatrix.push_back(calculatePutDeltaVector(optionRow));
+    }
+    
+    return deltaMatrix;
+}
+
+std::vector<std::vector<double>> BlackScholesPricer::calculateGammaMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    std::vector<std::vector<double>> gammaMatrix;
+    gammaMatrix.reserve(optionMatrix.size());
+    
+    for (const auto& optionRow : optionMatrix)
+    {
+        gammaMatrix.push_back(calculateGammaVector(optionRow));
+    }
+    
+    return gammaMatrix;
+}
+
 std::pair<double, double> BlackScholesPricer::calculateD1D2(const Option& option) const
 {
     // Calculate d1 and d2 for the Black-Scholes formula

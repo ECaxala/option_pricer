@@ -34,6 +34,14 @@ public:
     std::vector<double> calculatePutDeltaVector(const std::vector<Option>& options) const override;
     std::vector<double> calculateGammaVector(const std::vector<Option>& options) const override;
 
+    // Matrix Greeks calculation for parameter variations
+    std::vector<std::vector<double>> calculateCallDeltaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const override;
+    std::vector<std::vector<double>> calculatePutDeltaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const override;
+    std::vector<std::vector<double>> calculateGammaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const override;
+
     // Utility functions
     std::string getName() const override;
     bool supportsGreeks() const override;

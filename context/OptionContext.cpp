@@ -106,6 +106,27 @@ std::vector<double> OptionContext::calculateGammaVector(const std::vector<Option
     return pricingStrategy_->calculateGammaVector(options);
 }
 
+std::vector<std::vector<double>> OptionContext::calculateCallDeltaMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculateCallDeltaMatrix(optionMatrix);
+}
+
+std::vector<std::vector<double>> OptionContext::calculatePutDeltaMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculatePutDeltaMatrix(optionMatrix);
+}
+
+std::vector<std::vector<double>> OptionContext::calculateGammaMatrix(
+    const std::vector<std::vector<Option>>& optionMatrix) const
+{
+    validateStrategy();
+    return pricingStrategy_->calculateGammaMatrix(optionMatrix);
+}
+
 std::vector<double> OptionContext::calculateCallVector(const std::vector<Option>& options) const
 {
     validateStrategy();

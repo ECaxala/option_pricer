@@ -253,5 +253,73 @@ int main(void)
     
     std::cout << "Vector Delta Test Complete" << std::endl;
     
+    std::cout << "\n=== MATRIX GREEKS CALCULATION TEST (part c) ===" << std::endl;
+    
+    // i) Call Delta Matrix as function of Expiry Time vs Spot Price
+    std::cout << "\ni) Call Delta Matrix (Expiry Time vs Spot Price):" << std::endl;
+    auto expiryTimesGreeks = meshArray(0.1, 0.5, 0.1);  // 0.1, 0.2, 0.3, 0.4, 0.5
+    auto spotPricesGreeks = meshArray(80.0, 120.0, 10.0);  // 80, 90, 100, 110, 120
+    
+    std::vector<std::vector<Option>> expiryGreeksMatrix;
+    for (double T : expiryTimesGreeks)
+    {
+        std::vector<Option> row;
+        for (double S : spotPricesGreeks)
+        {
+            Option option = gammaTestOption;  // Base parameters
+            option.ExerciseDate(T);
+            option.AssetPrice(S);
+            row.push_back(option);
+        }
+        expiryGreeksMatrix.push_back(row);
+    }
+    
+    auto callDeltaMatrix = context.calculateCallDeltaMatrix(expiryGreeksMatrix);
+    printMatrix(expiryTimesGreeks, spotPricesGreeks, callDeltaMatrix, "T\\S (Call Delta)");
+    
+    // ii) Gamma Matrix as function of Volatility vs Spot Price
+    std::cout << "\nii) Gamma Matrix (Volatility vs Spot Price):" << std::endl;
+    auto volatilitiesGreeks = meshArray(0.2, 0.6, 0.1);  // 0.2, 0.3, 0.4, 0.5, 0.6
+    
+    std::vector<std::vector<Option>> volGreeksMatrix;
+    for (double vol : volatilitiesGreeks)
+    {
+        std::vector<Option> row;
+        for (double S : spotPricesGreeks)
+        {
+            Option option = gammaTestOption;
+            option.Volatility(vol);
+            option.AssetPrice(S);
+            row.push_back(option);
+        }
+        volGreeksMatrix.push_back(row);
+    }
+    
+    auto gammaMatrix = context.calculateGammaMatrix(volGreeksMatrix);
+    printMatrix(volatilitiesGreeks, spotPricesGreeks, gammaMatrix, "Vol\\S (Gamma)");
+    
+    // iii) Put Delta Matrix as function of Strike vs Spot Price
+    std::cout << "\niii) Put Delta Matrix (Strike vs Spot Price):" << std::endl;
+    auto strikesGreeks = meshArray(80.0, 120.0, 10.0);  // 80, 90, 100, 110, 120
+    
+    std::vector<std::vector<Option>> strikeGreeksMatrix;
+    for (double K : strikesGreeks)
+    {
+        std::vector<Option> row;
+        for (double S : spotPricesGreeks)
+        {
+            Option option = gammaTestOption;
+            option.StrikePrice(K);
+            option.AssetPrice(S);
+            row.push_back(option);
+        }
+        strikeGreeksMatrix.push_back(row);
+    }
+    
+    auto putDeltaMatrix = context.calculatePutDeltaMatrix(strikeGreeksMatrix);
+    printMatrix(strikesGreeks, spotPricesGreeks, putDeltaMatrix, "K\\S (Put Delta)");
+    
+    std::cout << "Matrix Greeks Test Complete" << std::endl;
+    
     std::cout << "\n=== ALL TESTS PASSED ===" << std::endl;
 }

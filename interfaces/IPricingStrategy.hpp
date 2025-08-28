@@ -37,6 +37,14 @@ public:
     virtual std::vector<double> calculatePutDeltaVector(const std::vector<Option>& options) const = 0;
     virtual std::vector<double> calculateGammaVector(const std::vector<Option>& options) const = 0;
 
+    // Matrix Greeks calculation for parameter variations
+    virtual std::vector<std::vector<double>> calculateCallDeltaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const = 0;
+    virtual std::vector<std::vector<double>> calculatePutDeltaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const = 0;
+    virtual std::vector<std::vector<double>> calculateGammaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const = 0;
+
     // Utility functions
     virtual std::string getName() const = 0;
     virtual bool supportsGreeks() const = 0;

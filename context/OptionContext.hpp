@@ -48,6 +48,14 @@ public:
     std::vector<double> calculatePutDeltaVector(const std::vector<Option>& options) const;
     std::vector<double> calculateGammaVector(const std::vector<Option>& options) const;
 
+    // Matrix Greeks calculation for parameter variations
+    std::vector<std::vector<double>> calculateCallDeltaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const;
+    std::vector<std::vector<double>> calculatePutDeltaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const;
+    std::vector<std::vector<double>> calculateGammaMatrix(
+        const std::vector<std::vector<Option>>& optionMatrix) const;
+
     // Vector pricing for monotonic ranges
     std::vector<double> calculateCallVector(const std::vector<Option>& options) const;
     std::vector<double> calculatePutVector(const std::vector<Option>& options) const;
