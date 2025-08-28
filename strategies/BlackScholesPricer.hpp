@@ -24,6 +24,11 @@ public:
     std::vector<std::vector<double>> calculatePutMatrix(
         const std::vector<std::vector<Option>>& optionMatrix) const override;
 
+    // Greeks calculation
+    double calculateGamma(const Option& option) const override;
+    double calculateCallDelta(const Option& option) const override;
+    double calculatePutDelta(const Option& option) const override;
+
     // Utility functions
     std::string getName() const override;
     bool supportsGreeks() const override;

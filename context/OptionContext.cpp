@@ -55,6 +55,39 @@ double OptionContext::calculatePutPrice(const Option& option) const
     return pricingStrategy_->calculatePutPrice(option);
 }
 
+double OptionContext::calculateGamma(const Option& option) const
+{
+    validateStrategy();
+    if (!option.isValid())
+    {
+        throw std::invalid_argument("Invalid option parameters.");
+    }
+
+    return pricingStrategy_->calculateGamma(option);
+}
+
+double OptionContext::calculateCallDelta(const Option& option) const
+{
+    validateStrategy();
+    if (!option.isValid())
+    {
+        throw std::invalid_argument("Invalid option parameters.");
+    }
+
+    return pricingStrategy_->calculateCallDelta(option);
+}
+
+double OptionContext::calculatePutDelta(const Option& option) const
+{
+    validateStrategy();
+    if (!option.isValid())
+    {
+        throw std::invalid_argument("Invalid option parameters.");
+    }
+
+    return pricingStrategy_->calculatePutDelta(option);
+}
+
 std::vector<double> OptionContext::calculateCallVector(const std::vector<Option>& options) const
 {
     validateStrategy();
@@ -93,7 +126,7 @@ bool OptionContext::verifyParity(const Option& option, double tolerance) const
 
     double callPrice = calculateCallPrice(option);
     double putPrice = calculatePutPrice(option);
-    
+
     return parityValidator_->validateParity(option, callPrice, putPrice, tolerance);
 }
 

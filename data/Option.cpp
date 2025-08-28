@@ -1,12 +1,17 @@
 #include "Option.hpp" 
 
 Option::Option(double T, double K, double sig, double r, double S)
-    : T_(T), K_(K), sig_(sig), r_(r), S_(S)
+    : T_(T), K_(K), sig_(sig), r_(r), S_(S), b_(r) // Default: b = r (stock options)
+{
+}
+
+Option::Option(double T, double K, double sig, double r, double S, double b)
+    : T_(T), K_(K), sig_(sig), r_(r), S_(S), b_(b) // Explicit cost-of-carry
 {
 }
 
 Option::Option(const Option& other)
-    : T_(other.T_), K_(other.K_), sig_(other.sig_), r_(other.r_), S_(other.S_)
+    : T_(other.T_), K_(other.K_), sig_(other.sig_), r_(other.r_), S_(other.S_), b_(other.b_)
 {
 }
 
@@ -23,13 +28,14 @@ Option& Option::operator = (const Option& other)
         sig_ = other.sig_;
         r_ = other.r_;
         S_ = other.S_;
+        b_ = other.b_;
     }
     return *this;
 }
 
 bool Option::operator == (const Option& other) const
 {
-    return (T_ == other.T_ && K_ == other.K_ && sig_ == other.sig_ && r_ == other.r_ && S_ == other.S_);
+    return (T_ == other.T_ && K_ == other.K_ && sig_ == other.sig_ && r_ == other.r_ && S_ == other.S_ && b_ == other.b_);
 }
 
 bool Option::operator != (const Option& other) const
@@ -45,6 +51,7 @@ std::string Option::toString() const
     out += "Volatility (sig): " + std::to_string(sig_) + "\n";
     out += "Interest rate (r): " + std::to_string(r_) + "\n";
     out += "Underlying price (S): " + std::to_string(S_) + "\n";
+    out += "Cost of carry (b): " + std::to_string(b_) + "\n";
     return out;
 }
 

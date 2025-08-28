@@ -12,7 +12,8 @@ class Option
 public:
 
     Option() = delete; // Delete default Constructor
-    Option(double T, double K, double sig, double r, double S); // Parameterized Constructor
+    Option(double T, double K, double sig, double r, double S); // Parameterized Constructor (b = r default)
+    Option(double T, double K, double sig, double r, double S, double b); // Parameterized Constructor with cost-of-carry
     Option(const Option& other); // Copy Constructor
     ~Option(); // Destructor
 
@@ -27,6 +28,7 @@ public:
     double Volatility() const { return sig_; };
     double RiskFreeRate() const { return r_; };
     double AssetPrice() const { return S_; };
+    double CostOfCarry() const { return b_; };
 
     // Setters
     void ExerciseDate(double T) { T_ = T; };
@@ -34,6 +36,7 @@ public:
     void Volatility(double sig) { sig_ = sig; };
     void RiskFreeRate(double r) { r_ = r; };
     void AssetPrice(double S) { S_ = S; };
+    void CostOfCarry(double b) { b_ = b; };
 
     // Utility function
     std::string toString() const;
@@ -46,5 +49,6 @@ private:
     double sig_;   // Constant Volatility
     double r_;     // Risk-free interest rate
     double S_;     // Underlying asset price
+    double b_;     // Cost-of-carry parameter
 };
 #endif // OPTION_HPP

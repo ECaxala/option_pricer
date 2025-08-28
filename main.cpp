@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <cmath>
 // Boost
 #include <boost/random.hpp>
 #include <boost/math/distributions/normal.hpp>
@@ -176,6 +177,46 @@ int main(void)
     
     auto strikeCallMatrix = context.calculateCallMatrix(strikeMatrix);
     printMatrix(strikes, spotPricesMatrix, strikeCallMatrix, "K\\S");
+
+    // Test Section: Gamma calculation with provided test batch
+    std::cout << "\n=== GAMMA CALCULATION TEST ===" << std::endl;
+    
+    // Test data from the problem: K = 100, S = 105, T = 0.5, r = 0.1, b = 0, sig = 0.36
+    // Expected delta call = 0.5946, delta put = -0.3566
+    Option gammaTestOption(0.5, 100.0, 0.36, 0.1, 105.0, 0.0); // b = 0 for future options
+    
+    std::cout << "--- Gamma Test Parameters ---" << std::endl;
+    std::cout << "Parameters: " << gammaTestOption.toString() << std::endl;
+    
+    // Calculate gamma (same for both calls and puts)
+    double gamma = context.calculateGamma(gammaTestOption);
+    
+    std::cout << "Calculated Gamma: " << gamma << std::endl;
+    
+    // Calculate deltas
+    double callDelta = context.calculateCallDelta(gammaTestOption);
+    double putDelta = context.calculatePutDelta(gammaTestOption);
+    
+    std::cout << "Calculated Call Delta: " << callDelta << " (Expected: 0.5946)" << std::endl;
+    std::cout << "Calculated Put Delta: " << putDelta << " (Expected: -0.3566)" << std::endl;
+    
+    // Validation
+    double callDeltaError = std::abs(callDelta - 0.5946);
+    double putDeltaError = std::abs(putDelta - (-0.3566));
+    
+    std::cout << "Call Delta Error: " << callDeltaError << std::endl;
+    std::cout << "Put Delta Error: " << putDeltaError << std::endl;
+    
+    if (callDeltaError < 0.001 && putDeltaError < 0.001)
+    {
+        std::cout << "Delta Validation: PASSED" << std::endl;
+    }
+    else
+    {
+        std::cout << "Delta Validation: FAILED" << std::endl;
+    }
+    
+    std::cout << "Greeks Test Complete" << std::endl;
     
     std::cout << "\n=== ALL TESTS PASSED ===" << std::endl;
 }

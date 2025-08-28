@@ -38,6 +38,11 @@ public:
     double calculateCallPrice(const Option& option) const;
     double calculatePutPrice(const Option& option) const;
 
+    // Greeks calculation
+    double calculateGamma(const Option& option) const;
+    double calculateCallDelta(const Option& option) const;
+    double calculatePutDelta(const Option& option) const;
+
     // Vector pricing for monotonic ranges
     std::vector<double> calculateCallVector(const std::vector<Option>& options) const;
     std::vector<double> calculatePutVector(const std::vector<Option>& options) const;

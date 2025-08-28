@@ -27,6 +27,11 @@ public:
     virtual std::vector<std::vector<double>> calculatePutMatrix(
         const std::vector<std::vector<Option>>& optionMatrix) const = 0;
 
+    // Greeks calculation
+    virtual double calculateGamma(const Option& option) const = 0;
+    virtual double calculateCallDelta(const Option& option) const = 0;
+    virtual double calculatePutDelta(const Option& option) const = 0;
+
     // Utility functions
     virtual std::string getName() const = 0;
     virtual bool supportsGreeks() const = 0;

@@ -84,13 +84,44 @@ bool BlackScholesPricer::supportsGreeks() const
     return true;
 }
 
+double BlackScholesPricer::calculateGamma(const Option& option) const
+{
+    // Gamma formula: Γ = n(d1) / (S * σ * √T)
+    // Gamma is the same for both calls and puts
+    auto [d1, d2] = calculateD1D2(option);
+    
+    double denominator = option.AssetPrice() * option.Volatility() * std::sqrt(option.ExerciseDate());
+    
+    return n(d1) / denominator;
+}
+
+double BlackScholesPricer::calculateCallDelta(const Option& option) const
+{
+    // Call Delta: Δ_call = e^((b-r)*T) * N(d1)
+    auto [d1, d2] = calculateD1D2(option);
+    
+    double b = option.CostOfCarry();
+    return std::exp((b - option.RiskFreeRate()) * option.ExerciseDate()) * N(d1);
+}
+
+double BlackScholesPricer::calculatePutDelta(const Option& option) const
+{
+    // Put Delta: Δ_put = e^((b-r)*T) * (N(d1) - 1)
+    auto [d1, d2] = calculateD1D2(option);
+    
+    double b = option.CostOfCarry();
+    return std::exp((b - option.RiskFreeRate()) * option.ExerciseDate()) * (N(d1) - 1.0);
+}
+
 std::pair<double, double> BlackScholesPricer::calculateD1D2(const Option& option) const
 {
     // Calculate d1 and d2 for the Black-Scholes formula
+    // Use cost-of-carry parameter from Option
     double tmp = option.Volatility() * std::sqrt(option.ExerciseDate());
     
+    double b = option.CostOfCarry(); // Use cost-of-carry parameter from Option
     double d1 = (std::log(option.AssetPrice() / option.StrikePrice()) + 
-                 (option.RiskFreeRate() + 0.5 * std::pow(option.Volatility(), 2)) * option.ExerciseDate()) / tmp;
+                 (b + 0.5 * std::pow(option.Volatility(), 2)) * option.ExerciseDate()) / tmp;
     
     double d2 = d1 - tmp;
     
